@@ -1,0 +1,12 @@
+{
+    "name": "simple-nodejs-contactlist",
+    "version": "1.0.0",
+    "description": "Contact list",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC"
+}
