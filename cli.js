@@ -2,7 +2,11 @@ import readLine from "readline/promises";
 import { stdin as input, stdout as output } from "process";
 import fs from "fs/promises";
 
-const CONTACTS_LIST_FILE_PATH = "./data/contacts-list.json";
+import {
+  CONTACTS_LIST_FILE_PATH,
+  loadContacts,
+  formatContactsList,
+} from "./services.js";
 
 const rl = readLine.createInterface({ input, output });
 
@@ -10,17 +14,6 @@ const contactsList = [];
 
 console.log("--- ContactList ---");
 
-async function loadContacts() {
-  try {
-    const contactsListJSON = await fs.readFile(
-      CONTACTS_LIST_FILE_PATH,
-      "utf-8"
-    );
-    contactsList.push(...JSON.parse(contactsListJSON));
-  } catch (error) {
-    throw error;
-  }
-}
 async function saveContacts() {
   try {
     const contactsListJSON = JSON.stringify(contactsList);
@@ -70,9 +63,7 @@ async function deleteContact() {
 }
 
 function showContactsList() {
-  const formatedContactsList = contactsList
-    .map(({ id, firstName, lastName }) => `#${id} ${firstName} ${lastName}`)
-    .join("\n");
+  const formatedContactsList = formatContactsList(contactsList);
 
   console.log("Contacts List:");
   console.log(formatedContactsList);
@@ -105,7 +96,8 @@ async function help() {
 }
 
 async function main() {
-  await loadContacts();
+  const loadedContacts = await loadContacts();
+  contactsList.push(...loadedContacts);
   help();
 }
 
