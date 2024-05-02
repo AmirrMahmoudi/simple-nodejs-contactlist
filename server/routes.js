@@ -1,10 +1,14 @@
 import express from "express";
-import { formatContactsList,loadContacts } from "../services.js";
+import {
+  formatContactsList,
+  generateNewContactId,
+  loadContacts,
+  saveContacts,
+} from "../services.js";
 
 const contactsList = [];
 
 const router = express.Router();
-
 
 router.get("/list", (req, res) => {
   if (req.query.format) {
@@ -15,6 +19,23 @@ router.get("/list", (req, res) => {
     return;
   }
   res.json(contactsList);
+});
+
+router.post("/new", (req, res) => {
+  const { firstName, lastName } = req.body;
+
+  const id = generateNewContactId(contactsList);
+
+  const newContact = {
+    id,
+    firstName,
+    lastName,
+  };
+
+  contactsList.push(newContact);
+  saveContacts(contactsList);
+
+  res.send(`The contact "#${id} ${firstName} ${lastName}" has been created!`);
 });
 
 const loadedContacts = await loadContacts();
