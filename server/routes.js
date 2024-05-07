@@ -89,7 +89,6 @@ router.put("/:id", (req, res) => {
     lastName: lastName || contact.lastName,
   };
 
-  
   contactsList.splice(contactIndex, 1, updatedContact);
   saveContacts(contactsList);
 
